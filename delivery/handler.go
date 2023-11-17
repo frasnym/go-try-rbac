@@ -10,20 +10,20 @@ import (
 func registerHandler(e *echo.Echo) {
 	// Define routes with RBAC enforcement middleware
 	e.GET("/admin", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Admin route")
-	}, middleware.EnforceRBAC(rbac, adminPerm))
+		return c.String(http.StatusOK, "GET admin")
+	}, middleware.EnforceRBAC(rbac))
 
 	e.GET("/user", func(c echo.Context) error {
-		return c.String(http.StatusOK, "User route")
-	}, middleware.EnforceRBAC(rbac, userPerm))
+		return c.String(http.StatusOK, "GET user")
+	}, middleware.EnforceRBAC(rbac))
 
 	e.POST("/user", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Admin can access this route")
-	}, middleware.EnforceRBAC(rbac, adminPerm))
+	}, middleware.EnforceRBAC(rbac))
 
 	e.GET("/admin-or-user", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Admin or User route")
-	}, middleware.EnforceRBAC(rbac, adminPerm, userPerm))
+	}, middleware.EnforceRBAC(rbac))
 
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World! (Accessible by all users)")

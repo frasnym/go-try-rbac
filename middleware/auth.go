@@ -1,6 +1,10 @@
 package middleware
 
-import "github.com/labstack/echo/v4"
+import (
+	"fmt"
+
+	"github.com/labstack/echo/v4"
+)
 
 // Echo middleware to simulate authentication and retrieve user role
 func CheckAuth(next echo.HandlerFunc) echo.HandlerFunc {
@@ -15,6 +19,7 @@ func CheckAuth(next echo.HandlerFunc) echo.HandlerFunc {
 
 		// Set the user role in the context for later use
 		c.Set("userRole", userRole)
+		c.Set("userPermission", fmt.Sprint(c.Request().Method, " ", c.Request().URL.Path))
 
 		return next(c)
 	}

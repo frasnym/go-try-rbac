@@ -4,14 +4,18 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/frasnym/go-try-rbac/pgk/rbac"
+
 	"github.com/labstack/echo/v4"
 	"github.com/mikespook/gorbac"
 )
 
 // Middleware to enforce RBAC for a specific route
-func EnforceRBAC(rbac *gorbac.RBAC) echo.MiddlewareFunc {
+func EnforceRBAC() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
+			rbac := rbac.GetRBAC()
+
 			// Retrieve the user role from the context
 			userRole, ok := c.Get("userRole").(string)
 			if !ok {

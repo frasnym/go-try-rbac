@@ -1,4 +1,4 @@
-package delivery
+package rbac
 
 import (
 	"github.com/frasnym/go-try-rbac/model"
@@ -9,8 +9,12 @@ import (
 
 var rbac *gorbac.RBAC
 
-func InitRBAC(db *gorm.DB) {
-	rbac = gorbac.New()
+func GetRBAC() *gorbac.RBAC {
+	return rbac
+}
+
+func RefreshRBAC(db *gorm.DB) {
+	newRBAC := gorbac.New()
 
 	roles, err := GetUserRolesAndPermissions(db)
 	if err != nil {
@@ -24,8 +28,10 @@ func InitRBAC(db *gorm.DB) {
 			p := gorbac.NewStdPermission(permission.Name)
 			r.Assign(p)
 		}
-		rbac.Add(r)
+		newRBAC.Add(r)
 	}
+
+	rbac = newRBAC
 }
 
 // GetUserRolesAndPermissions retrieves roles and permissions for a user from the database
